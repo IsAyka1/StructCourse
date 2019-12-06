@@ -1,0 +1,257 @@
+//
+// Created by Aigul on 05.12.2019.
+//
+using namespace std;
+#include <iostream>
+#include "Text.h"
+#include <cstring>
+
+struct TVectorList {
+	TTextDList* text = nullptr;
+	TVectorList *next = nullptr;
+};
+int ChooseOperationVector() {
+	//system("cls");
+	int answer = 0;
+	cout << "//--------------------Menu for Vector List--------------------//" << endl;
+	cout << "1 - start work with vector" << endl;
+	cout << "2 - vector to null" << endl;
+	cout << "3 - vector is null?" << endl;
+	cout << "4 - how elements in vector?" << endl;
+	cout << "5 - print elem with index" << endl;
+	cout << "6 - delete last elem " << endl;
+	cout << "7 - take elem with index" << endl;
+	cout << "8 - change elem with index" << endl;
+	cout << "9 - add elem to the end" << endl;
+	cout << "10 - print vector" << endl;
+	cout << "11 - finish work with vector" << endl;
+	cout << "12 - Exit and delete vector" << endl;
+	cin >> answer;
+	return answer;
+}
+
+bool VectorIsStart(bool start) {
+	if(start) {
+		return true;
+	} else {
+		cout << "No access. Start work with vector!" << endl;
+		return false;
+	}
+}
+
+bool VectorIsEmpty(TVectorList *head) {
+	if(head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return true;
+	} else {
+		cout << "Vector is not empty" << endl;
+		return false;
+	}
+}
+
+bool VectorToNull(TVectorList**head) {
+	TVectorList *help;
+	if(head == nullptr) {
+		cout << "Error. Vector does not exist" << endl;
+		return false;
+	} else if(*head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return true;
+	}
+	while(*head != nullptr) {
+		help = *head;
+		*head = (*head)->next;
+		free(help);
+	}
+	*head = nullptr;
+	cout << "Vector is null" << endl;
+	return true;
+}
+
+bool VectorHowElem(TVectorList *head) {
+	if(head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return false;
+	}
+	int count{};
+	TVectorList *tmp = head;
+	while(tmp != nullptr) {
+		tmp = tmp->next;
+		count++;
+	}
+	cout << "In this vector " << count << " elem" << endl;
+	return true;
+}
+
+bool VectorPrintElem(TVectorList *head) {
+	if(head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return false;
+	}
+	int index;
+	cout << "Input index elem ypu want to print: ";
+	cin >> index;
+	for(int i = 0; i != index; ++i) {
+		head = head->next;
+	}
+	cout << "Elem[" << index << "] : ";
+	PrintText(head->text);
+	return true;
+}
+
+bool VectorDeleteLastElem(TVectorList **head) {
+	if(head == nullptr) {
+		cout << "Error. Vector does not exist" << endl;
+		return false;
+	} else if(*head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return false;
+	}
+	if((*head)->next == nullptr) {
+		*head = nullptr;
+		return true;
+	}
+	while((*head)->next->next != nullptr) {
+		*head = (*head)->next;
+	}
+	(*head)->next = nullptr;
+	cout << "Last elem was deleted" << endl;
+	return true;
+}
+
+TVectorList* VectorTakeElem(TVectorList **head) {
+	if(head == nullptr) {
+		cout << "Error. Vector does not exist" << endl;
+		return nullptr;
+	} else if(*head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return nullptr;
+	}
+	int index = 0;
+	int sizeVector = VectorHowElem(*head);
+	TVectorList *taken = nullptr;
+	cout << "Input index elem ypu want to take: ";
+	cin >> index;
+	if(index > sizeVector) {
+		cout << "Index is bigger than vector's size = " << sizeVector << endl;
+		return nullptr;
+	}
+	for(int i = 1; i != index - 1; ++i) {
+		*head = (*head)->next;
+	}
+	taken = (*head)->next;
+	(*head)->next = (*head)->next->next;
+	taken->next = nullptr;
+	cout << "Elem with index " << index << " was taken" << endl;
+	return taken;
+}
+
+bool VectorChangeElem(TVectorList *head) {
+	if(head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return false;
+	}
+	int index = 0;
+	int sizeVector = VectorHowElem(head);
+	cout << "Input index elem ypu want to take: ";
+	cin >> index;
+	if(index > sizeVector) {
+		cout << "Index is bigger than vector's size = " << sizeVector << endl;
+		return false;
+	}
+	for(int i = 0; i != index - 1; ++i) {
+		head = head->next;
+	}
+	cout << "Elem with index " << index << "now : " << endl;
+	PrintText(head->text);
+	TextWork(&(head->text));
+	cout << "Elem with index " << index << "was changed" << endl;
+	return true;
+}
+
+TVectorList* VectorCreateNew() {
+TVectorList* newElem = nullptr;
+		newElem = (TVectorList *) malloc(sizeof(TVectorList));
+		if (!newElem) {
+			cout << "Memory is not found" << endl;
+			return nullptr;
+		}
+		newElem->next = nullptr;
+		TextWork(&newElem->text);
+		return newElem;
+}
+
+bool VectorAddLastElem(TVectorList **head) {
+	if(head == nullptr) {
+		cout << "Error. Vector does not exist" << endl;
+		return false;
+	} else if(*head == nullptr) {
+		cout << "Vector is empty" << endl;
+		*head = VectorCreateNew();
+		cout << "First elem was added" << endl;
+		return true;
+	}
+	while((*head)->next != nullptr) {
+		*head = (*head)->next;
+	}
+	(*head)->next = VectorCreateNew();
+	cout << "Last elem was added" << endl;
+	return true;
+}
+
+bool PrintVector(TVectorList *head) {
+	if(head == nullptr) {
+		cout << "Vector is empty" << endl;
+		return false;
+	}
+	while(head) {
+		PrintText(head->text);
+		head = head->next;
+	}
+	return true;
+}
+
+int main() {
+	TVectorList *headVector = nullptr;
+	TVectorList *takenVector = nullptr;
+	bool loop = true;
+	bool start = false;
+	while(loop) {
+		switch (ChooseOperationVector()) {
+			case 1:{
+				cout << "Let's start work with vector" << endl;
+				start = true; break;
+			}
+			case 2: VectorIsStart(start) ? VectorToNull(&headVector) : 0 ; break;
+			case 3: VectorIsStart(start) ? VectorIsEmpty(headVector) : 0 ; break;
+			case 4: VectorIsStart(start) ? VectorHowElem(headVector) : 0 ; break;
+			case 5: VectorIsStart(start) ? VectorPrintElem(headVector) : 0 ; break;
+			case 6: VectorIsStart(start) ? VectorDeleteLastElem(&headVector) : 0 ; break;
+			case 7: VectorIsStart(start) ? takenVector = VectorTakeElem(&headVector) : 0 ; break;
+			case 8: VectorIsStart(start) ? VectorChangeElem(headVector) : 0 ; break;
+			case 9: VectorIsStart(start) ? VectorAddLastElem(&headVector) : 0 ; break;
+			case 10: VectorIsStart(start) ? PrintVector(headVector) : 0 ; break;
+			case 11:{
+				if(VectorIsStart(start)) {
+					cout << "Work with vector is over" << endl;
+					start = false;
+				}
+				break;
+			}
+			case 12: {
+				loop = false;
+				if(takenVector != nullptr) {
+					cout << "Elem that you took is :" << endl;
+					PrintText(takenVector->text);
+				}
+				cout << "Good Bye";
+				break;
+			}
+			default: {
+				printf("isn't correct, try again");
+				break;
+			}
+		}
+	}
+	return 0;
+}
