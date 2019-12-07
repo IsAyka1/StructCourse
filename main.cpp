@@ -267,6 +267,7 @@ int main() {
 				break;
 			}
 		}
+		cout << "Your Sentence now : \t" << endl;
 		PrintVector(headVector);
 	}
 	return 0;

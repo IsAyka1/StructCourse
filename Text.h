@@ -228,7 +228,7 @@ bool TextDeleteBackElem(TTextDList **head, TTextDList *tmp) {
 		return false;
 	}
 	if(tmp->back == nullptr) {
-		cout << "Pointer is at the end of text" << endl;
+		cout << "Pointer is at the head of text" << endl;
 		return true;
 	}
 	tmp->back = tmp->back->back;
@@ -456,6 +456,7 @@ bool TextWork(TTextDList **headText) {
 				cout << "Isn't correct operation" << endl; break;
 			}
 		}
+		cout << "Your Text now : \t" << endl;
 		PrintText(*headText, tmpText);
 		cout << endl;
 	}

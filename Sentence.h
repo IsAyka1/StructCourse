@@ -31,6 +31,7 @@ int SentenceChooseOperation() {
 	cout << "14 - go to the text" << endl;
 	cout << "15 - exit and delete structure" << endl;
 	cin >> answer;
+	getchar();
 	return answer;
 }
 
@@ -47,7 +48,7 @@ bool SentenceIsEmpty(TSentenceList *head) {
 	if(head == nullptr) {
 			return true;
 	} else {
-		return true;
+		return false;
 	}
 }
 
@@ -118,7 +119,7 @@ bool SentencePrintNext(TSentenceList *tmp) {
 		cout << "Pointer is at the end of sentence" << endl;
 		return true;
 	}
-	cout << "Next word is " << tmp->next->word << endl;
+	cout << "Next word is \"" << tmp->next->word  << "\"" << endl;
 	return true;
 }
 
@@ -176,18 +177,19 @@ TSentenceList* SentenceCreateNew() {
 	newWord->next = nullptr;
 	cout << "Input new word : ";
 	char* inputWord;
+	char c;
 	int size = 5;
 	inputWord =(char*)calloc(5, sizeof(char));
 	if(!inputWord) {
 		printf("Memory is not found");
 		return nullptr;
 	}
-	//cin >> inputWord[0];
-	scanf("%c", inputWord[0]);
+	int end = 0;
+	inputWord[0] = (char)getchar();
 	for(int i = 1; inputWord[i - 1] != '\n'; ++i) {
-		if (i < 5) {
-			scanf("%c", inputWord[i]);
-			//cin >> inputWord[i];
+		if (i < size) {
+			scanf("%c", &c);
+			inputWord[i] = c;
 		} else {
 			inputWord = (char*)realloc(inputWord, size += 5);
 			if (!inputWord) {
@@ -197,9 +199,10 @@ TSentenceList* SentenceCreateNew() {
 			}
 			--i;
 		}
+		end = i;
 	}
-	//cin >> newWord->word;
-
+	inputWord[end] = '\0';
+	newWord->word = inputWord;
 	return newWord;
 }
 
@@ -211,6 +214,10 @@ bool SentenceAddNextElem(TSentenceList **head, TSentenceList *tmp) {
 		*head = SentenceCreateNew();
 		cout << "First word was added" << endl;
 		return true;
+	}
+	if(tmp == nullptr) {
+		cout << "Pointer is not pushed" << endl;
+		return false;
 	}
 	TSentenceList *help = tmp->next;
 	tmp->next = SentenceCreateNew();
@@ -226,7 +233,7 @@ bool PrintSentence(TSentenceList *head, TSentenceList *tmp) {
 	}
 	while(head) {
 		if(head == tmp) {
-			cout << "_" << head->word << "_ ";
+			cout << "->" << head->word << "<- ";
 			head = head->next;
 			continue;
 		}
@@ -265,13 +272,13 @@ bool SentenceWork(TSentenceList **headSentence) {
 			case 9: SentenceIsStart(start) ? takenSentence = SentenceTakeNext(tmpSentence) : 0; break;
 			case 10: SentenceIsStart(start) ? SentenceChangeNext(tmpSentence) : 0; break;
 			case 11: SentenceIsStart(start) ? SentenceAddNextElem(headSentence, tmpSentence) : 0; break;
-			case 12 : SentenceIsStart(start) ? PrintSentence(*headSentence, tmpSentence) : 0; break;
+			case 12 : SentenceIsStart(start) ? PrintSentence(*headSentence, tmpSentence) : 0; cout << endl; break;
 			case 13 : {
 				if (SentenceIsStart(start)) {
-					loop = false;
+					start = false;
 					break;
 				}
-		}
+			}
 			case 14: {
 				loop = false;
 				break;
@@ -288,6 +295,7 @@ bool SentenceWork(TSentenceList **headSentence) {
 				cout << "Isn't correct operation" << endl; break;
 			}
 		}
+		cout << "Your Sentence now : \t";
 		PrintSentence(*headSentence, tmpSentence);
 		cout << endl;
 	}
