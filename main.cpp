@@ -95,7 +95,7 @@ bool VectorPrintElem(TVectorList *head) {
 		head = head->next;
 	}
 	cout << "Elem[" << index << "] : ";
-	PrintText(head->text);
+	PrintText(head->text, nullptr);
 	return true;
 }
 
@@ -108,6 +108,7 @@ bool VectorDeleteLastElem(TVectorList **head) {
 		return false;
 	}
 	if((*head)->next == nullptr) {
+		cout << "Vector has only first elem" << endl;
 		*head = nullptr;
 		return true;
 	}
@@ -159,26 +160,31 @@ bool VectorChangeElem(TVectorList *head) {
 		cout << "Index is bigger than vector's size = " << sizeVector << endl;
 		return false;
 	}
-	for(int i = 0; i != index - 1; ++i) {
+	for(int i = 1; i != index - 1; ++i) {
 		head = head->next;
 	}
 	cout << "Elem with index " << index << "now : " << endl;
-	PrintText(head->text);
-	TextWork(&(head->text));
-	cout << "Elem with index " << index << "was changed" << endl;
+	PrintText(head->next->text, nullptr);
+	if(TextWork(&(head->next->text))) { // if is empty
+		cout << "Text is empty" << endl;
+		head->next = head->next->next;
+		cout << "Text was deleted" << endl;
+	} else {
+		cout << "Elem with index " << index << "was changed" << endl;
+	}
 	return true;
 }
 
 TVectorList* VectorCreateNew() {
-TVectorList* newElem = nullptr;
-		newElem = (TVectorList *) malloc(sizeof(TVectorList));
-		if (!newElem) {
+TVectorList* newText = nullptr;
+		newText = (TVectorList *)malloc(sizeof(TVectorList));
+		if (!newText) {
 			cout << "Memory is not found" << endl;
 			return nullptr;
 		}
-		newElem->next = nullptr;
-		TextWork(&newElem->text);
-		return newElem;
+		newText->next = nullptr;
+		newText->text = nullptr;
+		return newText;
 }
 
 bool VectorAddLastElem(TVectorList **head) {
@@ -188,6 +194,11 @@ bool VectorAddLastElem(TVectorList **head) {
 	} else if(*head == nullptr) {
 		cout << "Vector is empty" << endl;
 		*head = VectorCreateNew();
+		if(TextWork(&(*head)->text)) { //if is empty
+			cout << "Sentence is empty" << endl;
+			*head = nullptr;
+			return true;
+		}
 		cout << "First elem was added" << endl;
 		return true;
 	}
@@ -204,9 +215,13 @@ bool PrintVector(TVectorList *head) {
 		cout << "Vector is empty" << endl;
 		return false;
 	}
+	int i = 0;
 	while(head) {
-		PrintText(head->text);
+		cout << "[" << i << "]";
+		PrintText(head->text, nullptr);
 		head = head->next;
+		++i;
+		cout << endl;
 	}
 	return true;
 }
@@ -241,8 +256,8 @@ int main() {
 			case 12: {
 				loop = false;
 				if(takenVector != nullptr) {
-					cout << "Elem that you took is :" << endl;
-					PrintText(takenVector->text);
+					cout << "Text that you took is :" << endl;
+					PrintText(takenVector->text, nullptr);
 				}
 				cout << "Good Bye";
 				break;
@@ -252,6 +267,7 @@ int main() {
 				break;
 			}
 		}
+		PrintVector(headVector);
 	}
 	return 0;
 }
