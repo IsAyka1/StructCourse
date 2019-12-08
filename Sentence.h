@@ -160,8 +160,8 @@ bool SentenceChangeNext(TSentenceList *tmp) {
 		cout << "Pointer is at the end of sentence" << endl;
 		return true;
 	}
-	cout << "Next word now : " << tmp->next->word << endl;
-	cout << "Input new word : ";
+	cout << "Next word now :" << tmp->next->word << endl;
+	cout << "Input new word :";
 	cin >> tmp->next->word;
 	cout << "Next word was changed" << endl;
 	return true;
@@ -175,7 +175,7 @@ TSentenceList* SentenceCreateNew() {
 		return nullptr;
 	}
 	newWord->next = nullptr;
-	cout << "Input new word : ";
+	cout << "Input new word :";
 	char* inputWord;
 	char c;
 	int size = 5;
@@ -284,18 +284,17 @@ bool SentenceWork(TSentenceList **headSentence) {
 				break;
 			}
 			case 15: {
-				loop = false;
 				if(takenSentence != nullptr) {
 					cout << "Word that you took is : " << takenSentence->word << endl;
 				}
 				cout << "Good Bye";
-				break;
+				exit(0);
 			}
 			default: {
 				cout << "Isn't correct operation" << endl; break;
 			}
 		}
-		cout << "Your Sentence now : \t";
+		cout << "Your Sentence now : " << endl;
 		PrintSentence(*headSentence, tmpSentence);
 		cout << endl;
 	}

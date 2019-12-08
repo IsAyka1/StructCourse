@@ -106,15 +106,15 @@ bool PrintText(TTextDList *head, TTextDList *tmp) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
-
 	while(head) {
 		if(head == tmp) {
-			cout << "->\t";
+			cout << "->";
 		}
 		PrintSentence(head->sentence, nullptr);
 		head = head->next;
 		cout << '.' << endl;
 	}
+	cout << endl;
 	return true;
 }
 
@@ -183,8 +183,9 @@ bool TextPrintNextElem(TTextDList *tmp) {
 		cout << "Pointer at the end of text" << endl;
 		return  false;
 	}
-	cout << "Next sentence is: " << endl;
+	cout << "Next sentence is:" << endl;
 	PrintSentence(tmp->next->sentence, nullptr);
+	cout << endl;
 	return true;
 }
 
@@ -197,14 +198,19 @@ bool TextPrintBackElem(TTextDList *tmp) {
 		cout << "Pointer at the head of text" << endl;
 		return  false;
 	}
-	cout << "Back sentence is: " << endl;
+	cout << "Back sentence is:" << endl;
 	PrintSentence(tmp->back->sentence, nullptr);
+	cout << endl;
 	return true;
 }
 
 bool TextDeleteNextElem(TTextDList *head, TTextDList *tmp) {
 	if(head == nullptr) {
 		cout << "Text is empty" << endl;
+		return false;
+	}
+	if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
 		return false;
 	}
 	if(tmp->next == nullptr) {
@@ -227,6 +233,10 @@ bool TextDeleteBackElem(TTextDList **head, TTextDList *tmp) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
+	if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
+		return false;
+	}
 	if(tmp->back == nullptr) {
 		cout << "Pointer is at the head of text" << endl;
 		return true;
@@ -246,6 +256,10 @@ TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
 		cout << "Text is empty" << endl;
 		return nullptr;
 	}
+	if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
+		return nullptr;
+	}
 	if(tmp->next == nullptr) {
 		cout << "Pointer is at the end of text" << endl;
 		return nullptr;
@@ -256,9 +270,13 @@ TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
 	return taken;
 }
 
-TTextDList* TextTakeBackElem(TTextDList *head, TTextDList *tmp) {
-	if(head == nullptr) {
+TTextDList* TextTakeBackElem(TTextDList **head, TTextDList *tmp) {
+	if(*head == nullptr) {
 		cout << "Text is empty" << endl;
+		return nullptr;
+	}
+	if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
 		return nullptr;
 	}
 	if(tmp->back == nullptr) {
@@ -267,7 +285,7 @@ TTextDList* TextTakeBackElem(TTextDList *head, TTextDList *tmp) {
 	}
 	TTextDList * taken = nullptr;
 	taken = tmp->back;
-	TextDeleteBackElem(&head,tmp);
+	TextDeleteBackElem(head,tmp);
 	return taken;
 }
 
@@ -280,8 +298,9 @@ bool TextChangeNextElem(TTextDList *head, TTextDList *tmp) {
 		cout << "Pointer at the end of text" << endl;
 		return  false;
 	}
-	cout << "Next Sentence now : " << endl;
+	cout << "Next Sentence now :" << endl;
 	PrintSentence(tmp->next->sentence, nullptr);
+	cout << endl;
 	if(SentenceWork(&tmp->next->sentence)) { // if is empty
 		cout << "Sentence is empty" << endl;
 		TextDeleteNextElem(head,tmp);
@@ -291,7 +310,7 @@ bool TextChangeNextElem(TTextDList *head, TTextDList *tmp) {
 	return true;
 }
 
-bool TextChangeBackElem(TTextDList *head, TTextDList *tmp) {
+bool TextChangeBackElem(TTextDList **head, TTextDList *tmp) {
 	if(tmp == nullptr) {
 		cout << "Text is empty or Pointer does not put" << endl;
 		return false;
@@ -300,11 +319,12 @@ bool TextChangeBackElem(TTextDList *head, TTextDList *tmp) {
 		cout << "Pointer at the head of text" << endl;
 		return  false;
 	}
-	cout << "Back Sentence now : " << endl;
+	cout << "Back Sentence now :" << endl;
 	PrintSentence(tmp->back->sentence, nullptr);
+	cout << endl;
 	if(SentenceWork(&tmp->back->sentence)) { // if is empty
 		cout << "Sentence is empty" << endl;
-		TextDeleteBackElem(&head,tmp);
+		TextDeleteBackElem(head,tmp);
 	} else {
 		cout << "Back Sentence was changed" << endl;
 	}
@@ -339,6 +359,10 @@ bool TextAddNextElem(TTextDList **head, TTextDList *tmp) {
 		cout << "First sentence was added" << endl;
 		return true;
 	}
+	if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
+		return false;
+	}
 	TTextDList *help = tmp->next;
 	tmp->next = TextCreateNew();
 	if(SentenceWork(&tmp->next->sentence)) { //if is empty
@@ -346,9 +370,11 @@ bool TextAddNextElem(TTextDList **head, TTextDList *tmp) {
 		TextDeleteNextElem(*head,tmp);
 		return true;
 	}
-	tmp->next->back = tmp;
+	tmp->next->back = tmp;  //2_1_
 	tmp->next->next = help;
-	tmp->next->next->back = tmp->next;
+	if(help) {
+		tmp->next->next->back = tmp->next;
+	}
 	cout << "Next sentence was added" << endl;
 	return true;
 }
@@ -367,6 +393,9 @@ bool TextAddBackElem(TTextDList **head, TTextDList *tmp) {
 		}
 		cout << "First sentence was added" << endl;
 		return true;
+	} else if(tmp == nullptr) {
+		cout << "Text is empty or Pointer does not put" << endl;
+		return false;
 	} else if(tmp->back == nullptr) {
 		*head = TextCreateNew();
 		if(SentenceWork(&(*head)->sentence)) { //if is empty
@@ -428,9 +457,9 @@ bool TextWork(TTextDList **headText) {
 			case 12: TextIsStart(start) ? TextDeleteNextElem(*headText, tmpText) : 0; break;
 			case 13: TextIsStart(start) ? TextDeleteBackElem(headText, tmpText) : 0; break;
 			case 14: TextIsStart(start) ? takenText = TextTakeNextElem(*headText, tmpText) : 0; break;
-			case 15: TextIsStart(start) ? takenText = TextTakeBackElem(*headText, tmpText) : 0; break;
+			case 15: TextIsStart(start) ? takenText = TextTakeBackElem(headText, tmpText) : 0; break;
 			case 16: TextIsStart(start) ? TextChangeNextElem(*headText, tmpText) : 0; break;
-			case 17: TextIsStart(start) ? TextChangeBackElem(*headText, tmpText) : 0; break;
+			case 17: TextIsStart(start) ? TextChangeBackElem(headText, tmpText) : 0; break;
 			case 18: TextIsStart(start) ? TextAddNextElem(headText, tmpText) : 0; break;
 			case 19: TextIsStart(start) ? TextAddBackElem(headText, tmpText) : 0; break;
 			case 20: TextIsStart(start) ? PrintText(*headText, tmpText) : 0; break;
@@ -444,13 +473,12 @@ bool TextWork(TTextDList **headText) {
 				break;
 			}
 			case 23: {
-				loop = false;
 				if(takenText != nullptr) {
 					cout << "Sentence that you took is :" << endl;
 					PrintSentence(takenText->sentence, nullptr);
 				}
 				cout << "Good Bye";
-				break;
+				exit(0);
 			}
 			default: {
 				cout << "Isn't correct operation" << endl; break;
@@ -458,7 +486,6 @@ bool TextWork(TTextDList **headText) {
 		}
 		cout << "Your Text now : \t" << endl;
 		PrintText(*headText, tmpText);
-		cout << endl;
 	}
 	return TextIsEmpty(*headText);
 }
