@@ -5,7 +5,7 @@
 #ifndef STRUCTCOURSE_SENTENCE_H
 #define STRUCTCOURSE_SENTENCE_H
 
-#include <stdlib.h>
+#include <cstdlib>
 using namespace std;
 struct TSentenceList {
 	TSentenceList *next = nullptr;
@@ -13,11 +13,11 @@ struct TSentenceList {
 };
 
 int SentenceChooseOperation() {
-	int answer = 0;
+	char *answerStr = (char*)malloc(sizeof(char)*2);
 	cout << "//--------------------Menu for Sentence List--------------------//" << endl;
 	cout << "1 - start work with list" << endl;
-	cout << "2 - list to null" << endl;
-	cout << "3 - list is null?" << endl;
+	cout << "2 - clean list" << endl;
+	cout << "3 - list is empty?" << endl;
 	cout << "4 - pointer to head" << endl;
 	cout << "5 - is pointer at the end of list?" << endl;
 	cout << "6 - pointer to the next" << endl;
@@ -30,7 +30,8 @@ int SentenceChooseOperation() {
 	cout << "13 - finish work with list" << endl;
 	cout << "14 - go to the text" << endl;
 	cout << "15 - exit and delete structure" << endl;
-	cin >> answer;
+	scanf("%s", answerStr);
+	int answer = atoi(answerStr);
 	getchar();
 	return answer;
 }
@@ -58,7 +59,7 @@ bool SentenceToNull(TSentenceList **head, TSentenceList **tmp) {
 		cout << "Sentence does not exist" << endl;
 		return false;
 	} else if(*head == nullptr) {
-		cout << "Sentence is empty" << endl;
+		cout << "Sentence is empty already" << endl;
 		return false;
 	}
 	while(*head != nullptr) {
@@ -68,13 +69,13 @@ bool SentenceToNull(TSentenceList **head, TSentenceList **tmp) {
 	}
 	*head = nullptr;
 	*tmp = nullptr;
-	cout << "Sentence is null now" << endl;
+	cout << "Sentence is empty now" << endl;
 	return true;
 }
 
 bool SentenceToHead(TSentenceList *head, TSentenceList **tmp) {
 	if (head == nullptr) {
-		cout << "Sentence is empty" << endl;
+		cout << "Sentence is empty. You can't push pointer" << endl;
 		return false;
 	}
 	*tmp = head;
@@ -133,7 +134,7 @@ bool SentenceDeleteNext(TSentenceList *tmp) {
 		return true;
 	}
 	tmp->next = tmp->next->next;
-	cout << "Next word was deleted" << endl;
+	cout << "Next Word was deleted" << endl;
 	return true;
 }
 
@@ -147,6 +148,7 @@ TSentenceList* SentenceTakeNext(TSentenceList *tmp) {
 		return nullptr;
 	}
 	TSentenceList *taken = tmp->next;
+	cout << "Next Word was taken" << endl;
 	SentenceDeleteNext(tmp);
 	return taken;
 }
@@ -181,7 +183,7 @@ TSentenceList* SentenceCreateNew() {
 	int size = 5;
 	inputWord =(char*)calloc(5, sizeof(char));
 	if(!inputWord) {
-		printf("Memory is not found");
+		cout << "Memory is not found" << endl;
 		return nullptr;
 	}
 	int end = 0;
@@ -228,7 +230,7 @@ bool SentenceAddNextElem(TSentenceList **head, TSentenceList *tmp) {
 
 bool PrintSentence(TSentenceList *head, TSentenceList *tmp) {
 	if(head == nullptr) {
-		cout << "Sentence is empty" << endl;
+		cout << "Sentence is empty. You can't print sentence" << endl;
 		return false;
 	}
 	while(head) {
@@ -272,17 +274,14 @@ bool SentenceWork(TSentenceList **headSentence) {
 			case 9: SentenceIsStart(start) ? takenSentence = SentenceTakeNext(tmpSentence) : 0; break;
 			case 10: SentenceIsStart(start) ? SentenceChangeNext(tmpSentence) : 0; break;
 			case 11: SentenceIsStart(start) ? SentenceAddNextElem(headSentence, tmpSentence) : 0; break;
-			case 12 : SentenceIsStart(start) ? PrintSentence(*headSentence, tmpSentence) : 0; cout << endl; break;
-			case 13 : {
-				if (SentenceIsStart(start)) {
+			case 12: SentenceIsStart(start) ? PrintSentence(*headSentence, tmpSentence) : 0; cout << endl; break;
+			case 13: {
+				if(SentenceIsStart(start)) {
+					cout << "Work with sentence is over" << endl;
 					start = false;
-					break;
-				}
+				} break;
 			}
-			case 14: {
-				loop = false;
-				break;
-			}
+			case 14: loop = false; break;
 			case 15: {
 				if(takenSentence != nullptr) {
 					cout << "Word that you took is : " << takenSentence->word << endl;
@@ -290,13 +289,13 @@ bool SentenceWork(TSentenceList **headSentence) {
 				cout << "Good Bye";
 				exit(0);
 			}
-			default: {
-				cout << "Isn't correct operation" << endl; break;
-			}
+			default: cout << "Isn't correct operation" << endl; break;
 		}
-		cout << "Your Sentence now : " << endl;
-		PrintSentence(*headSentence, tmpSentence);
-		cout << endl;
+		if(*headSentence) {
+			cout << "Your Sentence now : " << endl;
+			PrintSentence(*headSentence, tmpSentence);
+			cout << endl;
+		}
 	}
 	return SentenceIsEmpty(*headSentence);
 }

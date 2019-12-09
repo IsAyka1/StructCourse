@@ -12,11 +12,11 @@ struct TTextDList {
 };
 
 int TextChooseOperation() {
-	int answer = 0;
+	char *answerStr = (char*)malloc(sizeof(char)*2);
 	cout << "//--------------------Menu for Text List--------------------//" << endl;
 	cout << "1 - start work with list" << endl;
-	cout << "2 - list to null" << endl;
-	cout << "3 - list is null?" << endl;
+	cout << "2 - clean list" << endl;
+	cout << "3 - list is empty?" << endl;
 	cout << "4 - pointer to head" << endl;
 	cout << "5 - pointer to end" << endl;
 	cout << "6 - is pointer at the head of list?" << endl;
@@ -37,7 +37,9 @@ int TextChooseOperation() {
 	cout << "21 - finish work with text" << endl;
 	cout << "22 - go to the vector" << endl;
 	cout << "23 - exit and delete structure" << endl;
-	cin >> answer;
+	scanf("%s", answerStr);
+	int answer = atoi(answerStr);
+	getchar();
 	return answer;
 }
 
@@ -56,7 +58,7 @@ bool TextToNull(TTextDList **head, TTextDList **tmp) {
 		cout << "Text does not exist" << endl;
 		return false;
 	} else if(*head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty already" << endl;
 		return false;
 	}
 	while(*head != nullptr) {
@@ -66,7 +68,7 @@ bool TextToNull(TTextDList **head, TTextDList **tmp) {
 	}
 	*head = nullptr;
 	*tmp = nullptr;
-	cout << "Text is null now" << endl;
+	cout << "Text is empty now" << endl;
 	return true;
 }
 
@@ -80,7 +82,7 @@ bool TextIsEmpty(TTextDList *head) {
 
 bool TextToHead(TTextDList *head, TTextDList **tmp) {
 	if(head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't push pointer" << endl;
 		return false;
 	}
 	*tmp = head;
@@ -90,7 +92,7 @@ bool TextToHead(TTextDList *head, TTextDList **tmp) {
 
 bool TextToEnd(TTextDList *head, TTextDList **tmp) {
 	if(head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't push pointer" << endl;
 		return false;
 	}
 	while(head->next) {
@@ -103,7 +105,7 @@ bool TextToEnd(TTextDList *head, TTextDList **tmp) {
 
 bool PrintText(TTextDList *head, TTextDList *tmp) {
 	if(head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't print text" << endl;
 		return false;
 	}
 	while(head) {
@@ -206,7 +208,7 @@ bool TextPrintBackElem(TTextDList *tmp) {
 
 bool TextDeleteNextElem(TTextDList *head, TTextDList *tmp) {
 	if(head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't delete elem" << endl;
 		return false;
 	}
 	if(tmp == nullptr) {
@@ -230,7 +232,7 @@ bool TextDeleteBackElem(TTextDList **head, TTextDList *tmp) {
 		cout << "Text does not exist" << endl;
 		return false;
 	} else if(*head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't delete elem" << endl;
 		return false;
 	}
 	if(tmp == nullptr) {
@@ -253,7 +255,7 @@ bool TextDeleteBackElem(TTextDList **head, TTextDList *tmp) {
 
 TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
 	if(head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't take elem" << endl;
 		return nullptr;
 	}
 	if(tmp == nullptr) {
@@ -266,13 +268,14 @@ TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
 	}
 	TTextDList * taken = nullptr;
 	taken = tmp->next;
+	cout << "Next Sentence was taken" << endl;
 	TextDeleteNextElem(head,tmp);
 	return taken;
 }
 
 TTextDList* TextTakeBackElem(TTextDList **head, TTextDList *tmp) {
 	if(*head == nullptr) {
-		cout << "Text is empty" << endl;
+		cout << "Text is empty. You can't take elem" << endl;
 		return nullptr;
 	}
 	if(tmp == nullptr) {
@@ -285,6 +288,7 @@ TTextDList* TextTakeBackElem(TTextDList **head, TTextDList *tmp) {
 	}
 	TTextDList * taken = nullptr;
 	taken = tmp->back;
+	cout << "Back Sentence was taken" << endl;
 	TextDeleteBackElem(head,tmp);
 	return taken;
 }
@@ -358,8 +362,7 @@ bool TextAddNextElem(TTextDList **head, TTextDList *tmp) {
 		}
 		cout << "First sentence was added" << endl;
 		return true;
-	}
-	if(tmp == nullptr) {
+	} else if(tmp == nullptr) {
 		cout << "Text is empty or Pointer does not put" << endl;
 		return false;
 	}
@@ -370,7 +373,7 @@ bool TextAddNextElem(TTextDList **head, TTextDList *tmp) {
 		TextDeleteNextElem(*head,tmp);
 		return true;
 	}
-	tmp->next->back = tmp;  //2_1_
+	tmp->next->back = tmp;
 	tmp->next->next = help;
 	if(help) {
 		tmp->next->next->back = tmp->next;
@@ -464,14 +467,12 @@ bool TextWork(TTextDList **headText) {
 			case 19: TextIsStart(start) ? TextAddBackElem(headText, tmpText) : 0; break;
 			case 20: TextIsStart(start) ? PrintText(*headText, tmpText) : 0; break;
 			case 21: {
-				if (TextIsStart(start)) {
-					break;
-				}
+				if(TextIsStart(start)) {
+					cout << "Work with text is over" << endl;
+					start = false;
+				} break;
 			}
-			case 22: {
-				loop = false;
-				break;
-			}
+			case 22: loop = false; break;
 			case 23: {
 				if(takenText != nullptr) {
 					cout << "Sentence that you took is :" << endl;
@@ -484,8 +485,10 @@ bool TextWork(TTextDList **headText) {
 				cout << "Isn't correct operation" << endl; break;
 			}
 		}
-		cout << "Your Text now : \t" << endl;
-		PrintText(*headText, tmpText);
+		if(*headText) {
+			cout << "Your Text now : \t" << endl;
+			PrintText(*headText, tmpText);
+		}
 	}
 	return TextIsEmpty(*headText);
 }
