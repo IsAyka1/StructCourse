@@ -235,7 +235,7 @@ bool PrintSentence(TSentenceList *head, TSentenceList *tmp) {
 	}
 	while(head) {
 		if(head == tmp) {
-			cout << "->" << head->word << "<- ";
+			cout << " \" " << head->word << " \" ";
 			head = head->next;
 			continue;
 		}

@@ -103,16 +103,16 @@ bool TextToEnd(TTextDList *head, TTextDList **tmp) {
 	return true;
 }
 
-bool PrintText(TTextDList *head, TTextDList *tmp) {
+bool PrintText(TTextDList *head, TTextDList *tmp, TSentenceList *tmpSentence) {
 	if(head == nullptr) {
 		cout << "Text is empty. You can't print text" << endl;
 		return false;
 	}
 	while(head) {
 		if(head == tmp) {
-			cout << "->";
+			cout << "-->";
 		}
-		PrintSentence(head->sentence, nullptr);
+		PrintSentence(head->sentence, tmpSentence);
 		head = head->next;
 		cout << '.' << endl;
 	}

@@ -259,7 +259,7 @@ bool VectorAddLastElem(TVectorList **head) {
 	return true;
 }
 
-bool PrintVector(TVectorList *head) {
+bool PrintVector(TVectorList *head, TTextDList *tmpText, TSentenceList *tmpSentence) {
 	if(head == nullptr) {
 		cout << "Vector is empty. You can't print Vector" << endl;
 		return false;
@@ -267,7 +267,7 @@ bool PrintVector(TVectorList *head) {
 	int i = 0;
 	while(head) {
 		cout << "[" << i << "] " << endl;
-		PrintText(head->text, nullptr);
+		PrintText(head->text, tmpText, tmpSentence);
 		head = head->next;
 		++i;
 	}
@@ -277,6 +277,8 @@ bool PrintVector(TVectorList *head) {
 int main() {
 	TVectorList *headVector = nullptr;
 	TVectorList *takenVector = nullptr;
+	TTextDList *tmpText = nullptr;
+	TSentenceList *tmpSentence = nullptr;
 	bool loop = true;
 	bool start = false;
 	while(loop) {
@@ -293,7 +295,7 @@ int main() {
 			case 7: VectorIsStart(start) ? takenVector = VectorTakeElem(&headVector) : 0 ; break;
 			case 8: VectorIsStart(start) ? VectorChangeElem(&headVector) : 0 ; break;
 			case 9: VectorIsStart(start) ? VectorAddLastElem(&headVector) : 0 ; break;
-			case 10: VectorIsStart(start) ? PrintVector(headVector) : 0 ; break;
+			case 10: VectorIsStart(start) ? PrintVector(headVector, tmpText, tmpSentence) : 0 ; break;
 			case 11:{
 				if(VectorIsStart(start)) {
 					cout << "Work with vector is over" << endl;
@@ -312,7 +314,7 @@ int main() {
 		}
 		if(headVector) {
 			cout << "Your Vector now : \t" << endl;
-			PrintVector(headVector);
+			PrintVector(headVector,tmpText, tmpSentence);
 		}
 	}
 	return 0;
