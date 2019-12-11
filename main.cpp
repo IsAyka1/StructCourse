@@ -8,12 +8,7 @@ using namespace std;
 #include "Text.h"
 #include <cstring>
 
-struct TVectorList {
-	TTextDList* text = nullptr;
-	TVectorList *next = nullptr;
-};
 int ChooseOperationVector() {
-	//system("cls");
 	char *answerStr = (char*)malloc(sizeof(char)*2);
 	cout << "//--------------------Menu for Vector List--------------------//" << endl;
 	cout << "1 - start work with vector" << endl;
@@ -96,19 +91,19 @@ bool VectorPrintElem(TVectorList *head) {
 	int sizeVector = VectorHowElem(head);
 	cout << "Input index elem you want to print:";
 	cin >> index;
-	if(index < 0) {
+	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return false;
 	}
-	if(index >= sizeVector) {
-		cout << "Index is bigger than vector's size" << endl;
+	if(index > sizeVector) {
+		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
 		return false;
 	}
-	for(int i = 0; i != index; ++i) {
+	for(int i = 1 ;i != index; ++i) {
 		head = head->next;
 	}
 	cout << "Elem[" << index << "] :" << endl;
-	PrintText(head->text, nullptr);
+	PrintText(head);
 	return true;
 }
 
@@ -147,27 +142,29 @@ TVectorList* VectorTakeElem(TVectorList **head) {
 	TVectorList *taken = nullptr;
 	cout << "Input index elem you want to take:";
 	cin >> index;
-	if(index < 0) {
+	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return nullptr;
 	}
-	if(index >= sizeVector) {
-		cout << "Index is bigger than vector's size" << endl;
+	if(index > sizeVector) {
+		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
 		return nullptr;
 	}
-	if(index == 0) {
+	if(index == 1) {
 		taken = *head;
 		*head = (*head)->next;
 		taken->next = nullptr;
+		PrintText(taken);
 		cout << "Elem with index " << index << " was taken" << endl;
 		return taken;
 	}
-	for(int i = 0; i != index - 1; ++i) {
+	for(int i = 1; i != index - 1; ++i) {
 		*head = (*head)->next;
 	}
 	taken = (*head)->next;
 	(*head)->next = (*head)->next->next;
 	taken->next = nullptr;
+	PrintText(taken);
 	cout << "Elem with index " << index << " was taken" << endl;
 	return taken;
 }
@@ -181,18 +178,18 @@ bool VectorChangeElem(TVectorList **head) {
 	int sizeVector = VectorHowElem(*head);
 	cout << "Input index elem you want to change:";
 	cin >> index;
-	if(index < 0) {
+	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return false;
 	}
-	if(index >= sizeVector) {
-		cout << "Index is bigger than vector's size" << endl;
+	if(index > sizeVector) {
+		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
 		return false;
 	}
-	if(index == 0) {
+	if(index == 1) {
 		cout << "Elem with index " << index << " now :" << endl;
-		PrintText((*head)->text, nullptr);
-		if(TextWork(&((*head)->text))) { // if is empty
+		PrintText(*head);
+		if(!TextWork(*head)) { // if is empty
 			cout << "Text is empty" << endl;
 			*head = (*head)->next;
 			cout << "Empty Text was deleted" << endl;
@@ -202,12 +199,12 @@ bool VectorChangeElem(TVectorList **head) {
 		return  true;
 	}
 	TVectorList *tmp = *head;
-	for(int i = 0; i != index - 1; ++i) {
+	for(int i = 1; i != index - 1; ++i) {
 		tmp = tmp->next;
 	}
 	cout << "Elem with index " << index << " now :" << endl;
-	PrintText(tmp->next->text, nullptr);
-	if(TextWork(&(tmp->next->text))) { // if is empty
+	PrintText(tmp->next);
+	if(!TextWork(tmp->next)) { // if is empty
 		cout << "Text is empty" << endl;
 		tmp->next = tmp->next->next;
 		cout << "Empty Text was deleted" << endl;
@@ -218,29 +215,40 @@ bool VectorChangeElem(TVectorList **head) {
 }
 
 TVectorList* VectorCreateNew() {
-TVectorList* newText = nullptr;
-		newText = (TVectorList *)malloc(sizeof(TVectorList));
-		if (!newText) {
-			cout << "Memory is not found" << endl;
-			return nullptr;
-		}
-		newText->next = nullptr;
-		newText->text = nullptr;
-		return newText;
+	TVectorList* newText = nullptr;
+	newText = (TVectorList *)malloc(sizeof(TVectorList));
+	if (!newText) {
+		cout << "Memory is not found" << endl;
+		return nullptr;
+	}
+	newText->next = nullptr;
+	newText->text = nullptr;
+	newText->tmpText = nullptr;
+	return newText;
+}
+
+TVectorList* VectorConnect() {
+	TVectorList *newObj = VectorCreateNew();
+	newObj->tmpText = TextWork(newObj);
+	if(!newObj->tmpText) {
+		return nullptr;
+	} else {
+		return newObj;
+	}
 }
 
 bool VectorAddLastElem(TVectorList **head) {
+	TVectorList *newObj = VectorConnect();
+	if(!newObj) {
+		cout << "Text is empty" << endl;
+		cout << "Text was deleted" << endl;
+		return true;
+	}
 	if(head == nullptr) {
 		cout << "Error. Vector does not exist" << endl;
 		return false;
 	} else if(*head == nullptr) {
-		*head = VectorCreateNew();
-		if(TextWork(&(*head)->text)) { //if is empty
-			cout << "Text is empty" << endl;
-			*head = nullptr;
-			cout << "Text was deleted" << endl;
-			return true;
-		}
+		*head = newObj;
 		cout << "First elem was added" << endl;
 		return true;
 	}
@@ -248,26 +256,20 @@ bool VectorAddLastElem(TVectorList **head) {
 	while(tmp->next != nullptr) {
 		tmp = tmp->next;
 	}
-	tmp->next = VectorCreateNew();
-	if(TextWork(&tmp->next->text)) { //if is empty
-		cout << "Text is empty" << endl;
-		tmp->next = nullptr;
-		cout << "Text was deleted" << endl;
-		return true;
-	}
+	tmp->next = newObj;
 	cout << "Last elem was added" << endl;
 	return true;
 }
 
-bool PrintVector(TVectorList *head, TTextDList *tmpText, TSentenceList *tmpSentence) {
+bool PrintVector(TVectorList *head) {
 	if(head == nullptr) {
 		cout << "Vector is empty. You can't print Vector" << endl;
 		return false;
 	}
-	int i = 0;
+	int i = 1;
 	while(head) {
 		cout << "[" << i << "] " << endl;
-		PrintText(head->text, tmpText, tmpSentence);
+		PrintText(head);
 		head = head->next;
 		++i;
 	}
@@ -277,8 +279,6 @@ bool PrintVector(TVectorList *head, TTextDList *tmpText, TSentenceList *tmpSente
 int main() {
 	TVectorList *headVector = nullptr;
 	TVectorList *takenVector = nullptr;
-	TTextDList *tmpText = nullptr;
-	TSentenceList *tmpSentence = nullptr;
 	bool loop = true;
 	bool start = false;
 	while(loop) {
@@ -295,7 +295,7 @@ int main() {
 			case 7: VectorIsStart(start) ? takenVector = VectorTakeElem(&headVector) : 0 ; break;
 			case 8: VectorIsStart(start) ? VectorChangeElem(&headVector) : 0 ; break;
 			case 9: VectorIsStart(start) ? VectorAddLastElem(&headVector) : 0 ; break;
-			case 10: VectorIsStart(start) ? PrintVector(headVector, tmpText, tmpSentence) : 0 ; break;
+			case 10: VectorIsStart(start) ? PrintVector(headVector) : 0 ; break;
 			case 11:{
 				if(VectorIsStart(start)) {
 					cout << "Work with vector is over" << endl;
@@ -305,7 +305,7 @@ int main() {
 			case 12: {
 				if(takenVector != nullptr) {
 					cout << "Text that you took is :" << endl;
-					PrintText(takenVector->text, nullptr);
+					PrintText(takenVector);
 				}
 				cout << "Good Bye";
 				return 0;
@@ -314,7 +314,7 @@ int main() {
 		}
 		if(headVector) {
 			cout << "Your Vector now : \t" << endl;
-			PrintVector(headVector,tmpText, tmpSentence);
+			PrintVector(headVector);
 		}
 	}
 	return 0;
