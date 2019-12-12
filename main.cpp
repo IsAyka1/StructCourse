@@ -91,10 +91,16 @@ bool VectorPrintElem(TVectorList *head) {
 		cout << "Vector is empty. You can't print elem" << endl;
 		return false;
 	}
-	int index = 0;
 	int sizeVector = VectorHowElem(head);
 	cout << "Input index elem you want to print:";
-	cin >> index;
+	char *answer = (char*)malloc(sizeof(char)*2);
+	if(!answer) {
+		cout << "Can not found memory" << endl;
+		return 0;
+	}
+	scanf("%s", answer);
+	int index = atoi(answer);
+	getchar();
 	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return false;
@@ -142,11 +148,17 @@ TVectorList* VectorTakeElem(TVectorList **head) {
 		cout << "Vector is empty. You can't take elem" << endl;
 		return nullptr;
 	}
-	int index = 0;
 	int sizeVector = VectorHowElem(*head);
-	TVectorList *taken = nullptr;
 	cout << "Input index elem you want to take:";
-	cin >> index;
+	char *answer = (char*)malloc(sizeof(char)*2);
+	if(!answer) {
+		cout << "Can not found memory" << endl;
+		return nullptr;
+	}
+	scanf("%s", answer);
+	int index = atoi(answer);
+	getchar();
+	TVectorList *taken = nullptr;
 	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return nullptr;
@@ -157,8 +169,6 @@ TVectorList* VectorTakeElem(TVectorList **head) {
 	}
 	if(index == 1) {
 		taken = *head;
-		//*head = (*head)->next;
-		//taken->next = nullptr;
 		PrintText(taken);
 		cout << "Elem with index " << index << " was taken" << endl;
 		return taken;
@@ -168,8 +178,6 @@ TVectorList* VectorTakeElem(TVectorList **head) {
 		tmp = tmp->next;
 	}
 	taken = tmp->next;
-	//(*head)->next = (*head)->next->next;
-	//taken->next = nullptr;
 	PrintText(taken);
 	cout << "Elem with index " << index << " was taken" << endl;
 	return taken;
@@ -180,10 +188,16 @@ bool VectorChangeElem(TVectorList **head) {
 		cout << "Vector is empty. You can't change elem" << endl;
 		return false;
 	}
-	int index = 0;
 	int sizeVector = VectorHowElem(*head);
 	cout << "Input index elem you want to change:";
-	cin >> index;
+	char *answer = (char*)malloc(sizeof(char)*2);
+	if(!answer) {
+		cout << "Can not found memory" << endl;
+		return 0;
+	}
+	scanf("%s", answer);
+	int index = atoi(answer);
+	getchar();
 	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
 		return false;
