@@ -14,6 +14,10 @@ struct TVectorList {
 
 int TextChooseOperation() {
 	char *answerStr = (char*)malloc(sizeof(char)*2);
+	if(!answerStr) {
+	    cout << "Can not found memory" << endl;
+	    return 0;
+	}
 	cout << "//--------------------Menu for Text List--------------------//" << endl;
 	cout << "1 - start work with list" << endl;
 	cout << "2 - clean list" << endl;
@@ -276,7 +280,8 @@ TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
 	}
 	TTextDList * taken = nullptr;
 	taken = tmp->next;
-	cout << "Next Sentence was taken" << endl;
+    PrintSentence(taken);
+	cout << endl << "Next Sentence was taken" << endl;
 	TextDeleteNextElem(head,tmp);
 	return taken;
 }
@@ -296,7 +301,8 @@ TTextDList* TextTakeBackElem(TVectorList *vector) {
 	}
 	TTextDList * taken = nullptr;
 	taken = (vector->tmpText)->back;
-	cout << "Back Sentence was taken" << endl;
+	PrintSentence(taken);
+	cout << endl <<"Back Sentence was taken" << endl;
 	TextDeleteBackElem(vector);
 	return taken;
 }
@@ -443,6 +449,7 @@ bool TextToPrint(TVectorList *vector) {
 		return false;
 	}
 	PrintText(vector);
+	cout << "Revers print:" << endl;
 	TTextDList *tmp = vector->text;
 	while(tmp->next) {
 		tmp = tmp->next;

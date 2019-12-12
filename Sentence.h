@@ -20,6 +20,10 @@ struct TTextDList {
 
 int SentenceChooseOperation() {
 	char *answerStr = (char*)malloc(sizeof(char)*2);
+    if(!answerStr) {
+        cout << "Can not found memory" << endl;
+        return 0;
+    }
 	cout << "//--------------------Menu for Sentence List--------------------//" << endl;
 	cout << "1 - start work with list" << endl;
 	cout << "2 - clean list" << endl;
@@ -161,7 +165,7 @@ TSentenceList* SentenceTakeNext(TSentenceList *tmp) {
 		return nullptr;
 	}
 	TSentenceList *taken = tmp->next;
-	cout << "Next Word was taken" << endl;
+	cout << "Next word is \"" << tmp->next << "\" was taken" << endl;
 	SentenceDeleteNext(tmp);
 	return taken;
 }

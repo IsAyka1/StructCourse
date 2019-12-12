@@ -10,6 +10,10 @@ using namespace std;
 
 int ChooseOperationVector() {
 	char *answerStr = (char*)malloc(sizeof(char)*2);
+    if(!answerStr) {
+        cout << "Can not found memory" << endl;
+        return 0;
+    }
 	cout << "//--------------------Menu for Vector List--------------------//" << endl;
 	cout << "1 - start work with vector" << endl;
 	cout << "2 - clean vector" << endl;
