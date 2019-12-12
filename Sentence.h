@@ -115,7 +115,7 @@ bool SentenceToNext(TTextDList *text) {
 		cout << "Sentence is empty or Pointer does not put" << endl;
 		return false;
 	}
-	if(text->sentence->next == nullptr) {
+	if(text->tmpSentence->next == nullptr) {
 		cout << "Pointer at the end of sentence" << endl;
 		return  false;
 	}
@@ -143,7 +143,7 @@ bool SentenceDeleteNext(TSentenceList *tmp) {
 		return false;
 	}
 	if(tmp->next == nullptr) {
-		cout << "Pointer is at the end of sentence" << endl;
+		cout << "Pointer is at the end of sentence." << endl;
 		return true;
 	}
 	tmp->next = tmp->next->next;
