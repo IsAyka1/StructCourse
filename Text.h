@@ -137,7 +137,7 @@ bool PrintText(TVectorList *vector ) {
 
 bool TextIsHead(TTextDList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
+		cout << "Text is empty " << endl;
 		return false;
 	}
 	if(tmp->back == nullptr) {
@@ -164,8 +164,8 @@ bool TextIsEnd(TTextDList *tmp) {
 }
 
 bool TextNext(TVectorList *vector) {
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
+	if(vector->text == nullptr) {
+		cout << "Text is empty" << endl;
 		return false;
 	}
 	if(vector->tmpText->next == nullptr) {
@@ -178,8 +178,8 @@ bool TextNext(TVectorList *vector) {
 }
 
 bool TextBack(TVectorList *vector) {
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
+	if(vector->text == nullptr) {
+		cout << "Text is empty" << endl;
 		return false;
 	}
 	if(vector->tmpText->back == nullptr) {
@@ -193,7 +193,7 @@ bool TextBack(TVectorList *vector) {
 
 bool TextPrintNextElem(TTextDList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
+		cout << "Text is empty" << endl;
 		return false;
 	}
 	if(tmp->next == nullptr) {
@@ -208,7 +208,7 @@ bool TextPrintNextElem(TTextDList *tmp) {
 
 bool TextPrintBackElem(TTextDList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
+		cout << "Text is empty" << endl;
 		return false;
 	}
 	if(tmp->back == nullptr) {
@@ -445,7 +445,7 @@ bool TextAddBackElem(TVectorList *vector) {
 
 bool TextToPrint(TVectorList *vector) {
 	if(vector->text == nullptr) {
-		cout << "Text is empty. You can't change elem" << endl;
+		cout << "Text is empty. You can't print elem" << endl;
 		return false;
 	}
 	PrintText(vector);

@@ -102,7 +102,7 @@ bool SentenceToHead(TTextDList* text) {
 
 bool SentenceIsEnd(TSentenceList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Sentence is empty or Pointer does not put" << endl;
+		cout << "Sentence is empty " << endl;
 		return false;
 	}
 	if(tmp->next == nullptr) {
@@ -116,7 +116,7 @@ bool SentenceIsEnd(TSentenceList *tmp) {
 
 bool SentenceToNext(TTextDList *text) {
 	if(text->sentence == nullptr) {
-		cout << "Sentence is empty or Pointer does not put" << endl;
+		cout << "Sentence is empty " << endl;
 		return false;
 	}
 	if(text->tmpSentence->next == nullptr) {
@@ -130,7 +130,7 @@ bool SentenceToNext(TTextDList *text) {
 
 bool SentencePrintNext(TSentenceList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Sentence is empty or Pointer does not put" << endl;
+		cout << "Sentence is empty" << endl;
 		return false;
 	}
 	if(tmp->next == nullptr) {
@@ -157,7 +157,7 @@ bool SentenceDeleteNext(TSentenceList *tmp) {
 
 TSentenceList* SentenceTakeNext(TSentenceList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Sentence is empty or Pointer does not put" << endl;
+		cout << "Sentence is empty" << endl;
 		return nullptr;
 	}
 	if(tmp->next == nullptr) {
@@ -172,7 +172,7 @@ TSentenceList* SentenceTakeNext(TSentenceList *tmp) {
 
 bool SentenceChangeNext(TSentenceList *tmp) {
 	if(tmp == nullptr) {
-		cout << "Sentence is empty or Pointer does not put" << endl;
+		cout << "Sentence is empty" << endl;
 		return false;
 	}
 	if(tmp->next == nullptr) {
@@ -299,7 +299,7 @@ TSentenceList* SentenceWork(TTextDList *text) {
 				if(takenSentence != nullptr) {
 					cout << "Word that you took is : " << takenSentence->word << endl;
 				}
-				cout << "Good Bye";
+				cout << "Good Bye" << endl;
 				exit(0);
 			}
 			default: cout << "Isn't correct operation" << endl; break;

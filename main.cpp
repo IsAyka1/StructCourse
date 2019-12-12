@@ -67,7 +67,7 @@ bool VectorToNull(TVectorList**head) {
 		free(help);
 	}
 	*head = nullptr;
-	cout << "Vector is empty" << endl;
+	cout << "Vector is empty now" << endl;
 	return true;
 }
 
@@ -125,10 +125,11 @@ bool VectorDeleteLastElem(TVectorList **head) {
 		cout << "Vector is empty now" << endl;
 		return true;
 	}
-	while((*head)->next->next != nullptr) {
-		*head = (*head)->next;
+	TVectorList *tmp = *head;
+	while(tmp->next->next != nullptr) {
+		tmp = tmp ->next;
 	}
-	(*head)->next = nullptr;
+	tmp->next = nullptr;
 	cout << "Last elem was deleted" << endl;
 	return true;
 }
@@ -156,18 +157,19 @@ TVectorList* VectorTakeElem(TVectorList **head) {
 	}
 	if(index == 1) {
 		taken = *head;
-		*head = (*head)->next;
-		taken->next = nullptr;
+		//*head = (*head)->next;
+		//taken->next = nullptr;
 		PrintText(taken);
 		cout << "Elem with index " << index << " was taken" << endl;
 		return taken;
 	}
+	TVectorList *tmp = *head;
 	for(int i = 1; i != index - 1; ++i) {
-		*head = (*head)->next;
+		tmp = tmp->next;
 	}
-	taken = (*head)->next;
-	(*head)->next = (*head)->next->next;
-	taken->next = nullptr;
+	taken = tmp->next;
+	//(*head)->next = (*head)->next->next;
+	//taken->next = nullptr;
 	PrintText(taken);
 	cout << "Elem with index " << index << " was taken" << endl;
 	return taken;
