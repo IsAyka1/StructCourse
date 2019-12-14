@@ -4,12 +4,13 @@
 using namespace std;
 #include <iostream>
 #include <cstdlib>
-#include <cctype>
 #include "Text.h"
-#include <cstring>
 
+//меню для структуры - динамический вектор
 int ChooseOperationVector() {
+	//выделение памяти под ответ
 	char *answerStr = (char*)malloc(sizeof(char)*2);
+	//проверка выделилась ли память
     if(!answerStr) {
         cout << "Can not found memory" << endl;
         return 0;
@@ -27,12 +28,14 @@ int ChooseOperationVector() {
 	cout << "10 - print vector" << endl;
 	cout << "11 - finish work with vector" << endl;
 	cout << "12 - Exit and delete vector" << endl;
+	//считывание выбора операции
 	scanf("%s", answerStr);
 	int answer = atoi(answerStr);
 	getchar();
 	return answer;
 }
 
+//проверка доступа к работе с вектором
 bool VectorIsStart(bool start) {
 	if(start) {
 		return true;
@@ -42,6 +45,7 @@ bool VectorIsStart(bool start) {
 	}
 }
 
+//проверка вектора на наличие элементов
 bool VectorIsEmpty(TVectorList *head) {
 	if(head == nullptr) {
 		cout << "Vector is empty" << endl;
@@ -52,15 +56,20 @@ bool VectorIsEmpty(TVectorList *head) {
 	}
 }
 
+//функция очищения вектора
 bool VectorToNull(TVectorList**head) {
 	TVectorList *help;
+	//проверка вектора на существование
 	if(head == nullptr) {
 		cout << "Error. Vector does not exist" << endl;
 		return false;
-	} else if(*head == nullptr) {
+	}
+	//проверка вектора на пустоту
+	if(*head == nullptr) {
 		cout << "Vector is empty already" << endl;
 		return true;
 	}
+	//очищение вектора
 	while(*head != nullptr) {
 		help = *head;
 		*head = (*head)->next;
@@ -71,11 +80,14 @@ bool VectorToNull(TVectorList**head) {
 	return true;
 }
 
+//функция подсчета элементов
 int VectorHowElem(TVectorList *head) {
+	//проверка вектора на пустоту
 	if(head == nullptr) {
 		cout << "Vector is empty. Zero elements in this vector" << endl;
 		return 0;
 	}
+	//подсчет количества элементов в векторе
 	int count{};
 	TVectorList *tmp = head;
 	while(tmp != nullptr) {
@@ -86,13 +98,12 @@ int VectorHowElem(TVectorList *head) {
 	return count;
 }
 
-bool VectorPrintElem(TVectorList *head) {
-	if(head == nullptr) {
-		cout << "Vector is empty. You can't print elem" << endl;
-		return false;
-	}
+//функция ввода индекса необходимого элемента вектора
+int indexInput(TVectorList *head) {
+	//сколько всего элементов в векторе
 	int sizeVector = VectorHowElem(head);
-	cout << "Input index elem you want to print:";
+	cout << "Input index elem you want to change:";
+	//считывание индекса необходимого элемента вектора
 	char *answer = (char*)malloc(sizeof(char)*2);
 	if(!answer) {
 		cout << "Can not found memory" << endl;
@@ -101,116 +112,138 @@ bool VectorPrintElem(TVectorList *head) {
 	scanf("%s", answer);
 	int index = atoi(answer);
 	getchar();
+	//обработка неподходящих ответов
 	if(index <= 0) {
 		cout << "Isn't correct index" << endl;
-		return false;
+		return 0;
 	}
 	if(index > sizeVector) {
 		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
+		return 0;
+	}
+	return index;
+}
+
+//функция вывода элемента
+bool VectorPrintElem(TVectorList *head) {
+	//проверка вектора на пустоту
+	if(head == nullptr) {
+		cout << "Vector is empty. You can't print elem" << endl;
 		return false;
 	}
+	//считывание индекса необходимого элемента
+	int index = indexInput(head);
+	//проверка на правильность ввода индекса
+	if(index == 0) {
+		return false;
+	}
+	//поиск необходимого элемента в векторе
 	for(int i = 1 ;i != index; ++i) {
 		head = head->next;
 	}
+	//вывод необходимого элемента вектора
 	cout << "Elem[" << index << "] :" << endl;
 	PrintText(head);
 	return true;
 }
 
+//функция удаления последнего элемента вектора
 bool VectorDeleteLastElem(TVectorList **head) {
+	//проверка вектора на существование
 	if(head == nullptr) {
 		cout << "Error. Vector does not exist" << endl;
 		return false;
-	} else if(*head == nullptr) {
+	}
+	//проверка вектора на пустоту
+	if(*head == nullptr) {
 		cout << "Vector is empty. You can't delete elem" << endl;
 		return false;
 	}
+	//удаление первого элемента вектора
 	if((*head)->next == nullptr) {
 		cout << "Vector has only first elem" << endl;
+		free(*head);
 		*head = nullptr;
 		cout << "Vector is empty now" << endl;
 		return true;
 	}
+	//удаление последнего элемента вектора
 	TVectorList *tmp = *head;
 	while(tmp->next->next != nullptr) {
 		tmp = tmp ->next;
 	}
+	free(tmp->next);
 	tmp->next = nullptr;
 	cout << "Last elem was deleted" << endl;
 	return true;
 }
 
+//функция взятия элемента вектора
 TVectorList* VectorTakeElem(TVectorList **head) {
+	//проверка на существование вектора
 	if(head == nullptr) {
 		cout << "Error. Vector does not exist" << endl;
 		return nullptr;
-	} else if(*head == nullptr) {
+	}
+	//проверка вектора на пустоту
+	if(*head == nullptr) {
 		cout << "Vector is empty. You can't take elem" << endl;
 		return nullptr;
 	}
-	int sizeVector = VectorHowElem(*head);
-	cout << "Input index elem you want to take:";
-	char *answer = (char*)malloc(sizeof(char)*2);
-	if(!answer) {
-		cout << "Can not found memory" << endl;
+	//считывание индекса необходимого элемента
+	int index = indexInput(*head);
+	//проверка на правильность ввода индекса
+	if(index == 0) {
 		return nullptr;
 	}
-	scanf("%s", answer);
-	int index = atoi(answer);
-	getchar();
 	TVectorList *taken = nullptr;
-	if(index <= 0) {
-		cout << "Isn't correct index" << endl;
-		return nullptr;
-	}
-	if(index > sizeVector) {
-		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
-		return nullptr;
-	}
+	//взятие первого элемента вектора
 	if(index == 1) {
 		taken = *head;
+		//вывод взятого элемента вектора
 		PrintText(taken);
 		cout << "Elem with index " << index << " was taken" << endl;
 		return taken;
 	}
+	//взятие необходимого элемента вектора
 	TVectorList *tmp = *head;
 	for(int i = 1; i != index - 1; ++i) {
 		tmp = tmp->next;
 	}
 	taken = tmp->next;
+	//вывод взятого элемента вектора
 	PrintText(taken);
 	cout << "Elem with index " << index << " was taken" << endl;
 	return taken;
 }
 
+//функция изменения элемента вектора
 bool VectorChangeElem(TVectorList **head) {
+	//проверка на существование вектора
+	if(head == nullptr) {
+		cout << "Error. Vector does not exist" << endl;
+		return false;
+	}
+	//проверка вектора на пустоту
 	if(*head == nullptr) {
 		cout << "Vector is empty. You can't change elem" << endl;
 		return false;
 	}
-	int sizeVector = VectorHowElem(*head);
-	cout << "Input index elem you want to change:";
-	char *answer = (char*)malloc(sizeof(char)*2);
-	if(!answer) {
-		cout << "Can not found memory" << endl;
-		return 0;
-	}
-	scanf("%s", answer);
-	int index = atoi(answer);
-	getchar();
-	if(index <= 0) {
-		cout << "Isn't correct index" << endl;
+	//считывание индекса необходимого элемента
+	int index = indexInput(*head);
+	//проверка на правильность ввода индекса
+	if(index == 0) {
 		return false;
 	}
-	if(index > sizeVector) {
-		cout << "Index is bigger than vector's size. Elem with this index does not exist" << endl;
-		return false;
-	}
+	//обработка изменения первого элемента вектора
 	if(index == 1) {
 		cout << "Elem with index " << index << " now :" << endl;
 		PrintText(*head);
-		if(!TextWork(*head)) { // if is empty
+		//проверка на пустоту измененного элемента вектора
+		if(!TextWork(*head)) {
+			//удаление первого элемента вектора
 			cout << "Text is empty" << endl;
+			free(*head);
 			*head = (*head)->next;
 			cout << "Empty Text was deleted" << endl;
 		} else {
@@ -218,13 +251,18 @@ bool VectorChangeElem(TVectorList **head) {
 		}
 		return  true;
 	}
+	//поиск необходимого элемента в векторе
 	TVectorList *tmp = *head;
 	for(int i = 1; i != index - 1; ++i) {
 		tmp = tmp->next;
 	}
+	//вывод необходимого текста до изменений
 	cout << "Elem with index " << index << " now :" << endl;
 	PrintText(tmp->next);
-	if(!TextWork(tmp->next)) { // if is empty
+	//обработка изменения необходимого элемента вектора
+	//проверка на пустоту измененного элемента вектора
+	if(!TextWork(tmp->next)) {
+		//удаление пустого элемента вектора
 		cout << "Text is empty" << endl;
 		tmp->next = tmp->next->next;
 		cout << "Empty Text was deleted" << endl;
@@ -234,19 +272,24 @@ bool VectorChangeElem(TVectorList **head) {
 	return true;
 }
 
+//функция создания нового элемента вектора
 TVectorList* VectorCreateNew() {
 	TVectorList* newText = nullptr;
+	//выделение памяти под новый элемент вектора
 	newText = (TVectorList *)malloc(sizeof(TVectorList));
+	//проверка выделилась ли память под новый элемент вектора
 	if (!newText) {
 		cout << "Memory is not found" << endl;
 		return nullptr;
 	}
+	//обнуление данных элемента вектора
 	newText->next = nullptr;
 	newText->text = nullptr;
 	newText->tmpText = nullptr;
 	return newText;
 }
 
+//функция проверки на пустоту созданного элемента вектора
 TVectorList* VectorConnect() {
 	TVectorList *newObj = VectorCreateNew();
 	newObj->tmpText = TextWork(newObj);
@@ -257,21 +300,28 @@ TVectorList* VectorConnect() {
 	}
 }
 
+//функция добавления созданного элемента в конец вектора
 bool VectorAddLastElem(TVectorList **head) {
+	//проверка на пустоту созданного элемента вектора
 	TVectorList *newObj = VectorConnect();
 	if(!newObj) {
 		cout << "Text is empty" << endl;
 		cout << "Text was deleted" << endl;
 		return true;
 	}
+	//проверка на существование вектора
 	if(head == nullptr) {
 		cout << "Error. Vector does not exist" << endl;
 		return false;
-	} else if(*head == nullptr) {
+	}
+	//проверка вектора на пустоту
+	if(*head == nullptr) {
+		//добавление первого элемента в вектор
 		*head = newObj;
 		cout << "First elem was added" << endl;
 		return true;
 	}
+	//добавление нового элемента в конец вектора
 	TVectorList *tmp = *head;
 	while(tmp->next != nullptr) {
 		tmp = tmp->next;
@@ -281,7 +331,9 @@ bool VectorAddLastElem(TVectorList **head) {
 	return true;
 }
 
+//функция вывода вектора
 bool PrintVector(TVectorList *head) {
+	//проверка вектора на пустоту
 	if(head == nullptr) {
 		cout << "Vector is empty. You can't print Vector" << endl;
 		return false;
@@ -302,6 +354,7 @@ int main() {
 	bool loop = true;
 	bool start = false;
 	while(loop) {
+		//выбор необходимой операции над вектором
 		switch (ChooseOperationVector()) {
 			case 1:{
 				cout << "Let's start work with vector" << endl;
@@ -323,15 +376,19 @@ int main() {
 				} break;
 			}
 			case 12: {
+				//вывод взятого элемента вектора
 				if(takenVector != nullptr) {
 					cout << "Text that you took is :" << endl;
 					PrintText(takenVector);
 				}
+				//очищение вектора
+				VectorToNull(&headVector);
 				cout << "Good Bye";
 				return 0;
 			}
 			default: cout << "isn't correct, try again" << endl; break;
 		}
+		//вывод не пустого вектора после каждой операции
 		if(headVector) {
 			cout << "Your Vector now : \t" << endl;
 			PrintVector(headVector);

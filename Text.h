@@ -5,18 +5,21 @@
 #define STRUCTCOURSE_TEXT_H
 
 #include "Sentence.h"
-
+//описание структуры - динамический вектор
 struct TVectorList {
 	TTextDList* text = nullptr;
 	TVectorList *next = nullptr;
 	TTextDList *tmpText = nullptr;
 };
 
+//меню для текста
 int TextChooseOperation() {
+	//выделение памяти под ответ
 	char *answerStr = (char*)malloc(sizeof(char)*2);
+	//проверка выделилась ли память
 	if(!answerStr) {
-	    cout << "Can not found memory" << endl;
-	    return 0;
+		cout << "Can not found memory" << endl;
+		return 0;
 	}
 	cout << "//--------------------Menu for Text List--------------------//" << endl;
 	cout << "1 - start work with list" << endl;
@@ -42,12 +45,14 @@ int TextChooseOperation() {
 	cout << "21 - finish work with text" << endl;
 	cout << "22 - go to the vector" << endl;
 	cout << "23 - exit and delete structure" << endl;
+	//считывание выбора операции
 	scanf("%s", answerStr);
 	int answer = atoi(answerStr);
 	getchar();
 	return answer;
 }
 
+//проверка доступа к работе с текстом
 bool TextIsStart(bool start) {
 	if(start) {
 		return true;
@@ -57,6 +62,7 @@ bool TextIsStart(bool start) {
 	}
 }
 
+//функция возвращения рабочего указателя в структуру вектора
 TTextDList *TextTmp(TVectorList *vector) {
 	if(vector->text == nullptr) {
 		return nullptr;
@@ -65,12 +71,15 @@ TTextDList *TextTmp(TVectorList *vector) {
 	} else return vector->text;
 }
 
+//функция очищения текста
 bool TextToNull(TVectorList *vector) {
 	TTextDList *help;
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty already" << endl;
 		return false;
 	}
+	//очищение вектора
 	TTextDList *head = vector->text;
 	while(head != nullptr) {
 		help = head;
@@ -83,6 +92,7 @@ bool TextToNull(TVectorList *vector) {
 	return true;
 }
 
+//функция проверки текста на наличие предложений
 bool TextIsEmpty(TTextDList *head) {
 	if(head == nullptr) {
 		cout << "Text is empty" << endl;
@@ -93,7 +103,9 @@ bool TextIsEmpty(TTextDList *head) {
 	}
 }
 
+//функция перемещения рабочего указателя в начало текста
 bool TextToHead(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't push pointer" << endl;
 		return false;
@@ -103,7 +115,9 @@ bool TextToHead(TVectorList *vector) {
 	return true;
 }
 
+//функция перемещение рабочего указателя в конец текста
 bool TextToEnd(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't push pointer" << endl;
 		return false;
@@ -117,13 +131,16 @@ bool TextToEnd(TVectorList *vector) {
 	return true;
 }
 
+//функция вывода текста
 bool PrintText(TVectorList *vector ) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't print text" << endl;
 		return false;
 	}
 	TTextDList *tmp = vector->text;
 	while(tmp) {
+		//вывод рабочего указателя
 		if(tmp == vector->tmpText) {
 			cout << "-->";
 		}
@@ -135,7 +152,9 @@ bool PrintText(TVectorList *vector ) {
 	return true;
 }
 
+//функция проверки нахождения рабочего указателя в начале текста
 bool TextIsHead(TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(tmp == nullptr) {
 		cout << "Text is empty " << endl;
 		return false;
@@ -149,7 +168,9 @@ bool TextIsHead(TTextDList *tmp) {
 	}
 }
 
+//функция проверки нахождения рабочего указателя в конце текста
 bool TextIsEnd(TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(tmp == nullptr) {
 		cout << "Text is empty or Pointer does not put" << endl;
 		return false;
@@ -163,78 +184,97 @@ bool TextIsEnd(TTextDList *tmp) {
 	}
 }
 
+//функция передвижения рабочего указателя на следующий элемент текста
 bool TextNext(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
+	//проверка существования следующего элемента текста
 	if(vector->tmpText->next == nullptr) {
 		cout << "Pointer at the end of text" << endl;
 		return  false;
 	}
+	//передвижения рабочего указателя на следующий элемент текста
 	vector->tmpText = vector->tmpText->next;
 	cout << "Pointer is at the next" << endl;
 	return true;
 }
 
+//функция передвижения рабочего указателя на предыдущий элемент текста
 bool TextBack(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
+	//проверка существования предыдущего элемента текста
 	if(vector->tmpText->back == nullptr) {
 		cout << "Pointer at the head of text" << endl;
 		return  false;
 	}
+	//передвижение рабочего указателя на предыдущий элемент текста
 	vector->tmpText = vector->tmpText->back;
 	cout << "Pointer is at the back" << endl;
 	return true;
 }
 
+//функция вывода следующего от рабочего указателя элемента текста
 bool TextPrintNextElem(TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(tmp == nullptr) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
+	//проверка существования слудующего элемента текста
 	if(tmp->next == nullptr) {
 		cout << "Pointer at the end of text" << endl;
 		return  false;
 	}
+	//вывод следующего от рабочего указателя элемента текста
 	cout << "Next sentence is:" << endl;
 	PrintSentence(tmp->next);
 	cout << endl;
 	return true;
 }
 
+//функция вывода предыдущего от рабочего указателя элемента текста
 bool TextPrintBackElem(TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(tmp == nullptr) {
 		cout << "Text is empty" << endl;
 		return false;
 	}
+	//проверка на существование предыдущего элемента текста
 	if(tmp->back == nullptr) {
 		cout << "Pointer at the head of text" << endl;
 		return  false;
 	}
+	//вывод предыдущего от рабочего указателя элемента текста
 	cout << "Back sentence is:" << endl;
 	PrintSentence(tmp->back);
 	cout << endl;
 	return true;
 }
 
+//функция удаления следующего от рабочего указателя элемента текста
 bool TextDeleteNextElem(TTextDList *head, TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(head == nullptr) {
 		cout << "Text is empty. You can't delete elem" << endl;
 		return false;
 	}
-	if(tmp == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
-	}
+	//проверка на существование следующего элемента текста
 	if(tmp->next == nullptr) {
 		cout << "Pointer is at the end of text" << endl;
 		return true;
 	}
-	tmp->next = tmp->next->next;
+	//удаление следующего от рабочего указателя элемента текста
+	TTextDList *help = tmp->next->next;
+	free(tmp->next);
+	//установление связей после удаления элемента текста
+	tmp->next = help;
 	if(tmp->next) {
 		tmp->next->back = tmp;
 	}
@@ -242,20 +282,23 @@ bool TextDeleteNextElem(TTextDList *head, TTextDList *tmp) {
 	return true;
 }
 
+//функция удаления предыдущего от рабочего указателя элемента текста
 bool TextDeleteBackElem(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't delete elem" << endl;
 		return false;
 	}
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
-	}
+	//проверка на существование предыдущего элемента текста
 	if(vector->tmpText->back == nullptr) {
 		cout << "Pointer is at the head of text" << endl;
 		return true;
 	}
-	(vector->tmpText)->back = (vector->tmpText)->back->back;
+	//удаление предыдущего от рабочего указателя элемента текста
+	TTextDList *help = (vector->tmpText)->back->back;
+	free((vector->tmpText)->back);
+	//установление связей после удаления элемента текста
+	(vector->tmpText)->back = help;
 	if((vector->tmpText)->back) {
 		(vector->tmpText)->back->next = vector->tmpText;
 	} else {
@@ -265,66 +308,72 @@ bool TextDeleteBackElem(TVectorList *vector) {
 	return true;
 }
 
+//функция взятия следующего от рабочего указателя элемента текста
 TTextDList* TextTakeNextElem(TTextDList *head, TTextDList *tmp) {
+	//проверка текста на пустоту
 	if(head == nullptr) {
 		cout << "Text is empty. You can't take elem" << endl;
 		return nullptr;
 	}
-	if(tmp == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return nullptr;
-	}
+	//проверка на существование следующего элемента текста
 	if(tmp->next == nullptr) {
 		cout << "Pointer is at the end of text" << endl;
 		return nullptr;
 	}
+	//взятие следующего от рабочего указателя элемента текста
 	TTextDList * taken = nullptr;
 	taken = tmp->next;
+	//вывод взятого элемента текста
     PrintSentence(taken);
 	cout << endl << "Next Sentence was taken" << endl;
+	//удаление взятого элемента текста
 	TextDeleteNextElem(head,tmp);
 	return taken;
 }
 
+//функция взятия предыдущего от рабочего указателя элемента текста
 TTextDList* TextTakeBackElem(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't take elem" << endl;
 		return nullptr;
 	}
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return nullptr;
-	}
+	//проверка на существование предыдущего элемента текста
 	if((vector->tmpText)->back == nullptr) {
 		cout << "Pointer is at the head of text" << endl;
 		return nullptr;
 	}
+	//взятие предыдущего от рабочего указателя элемента текста
 	TTextDList * taken = nullptr;
 	taken = (vector->tmpText)->back;
+	//вывод взятого элемента текста
 	PrintSentence(taken);
 	cout << endl <<"Back Sentence was taken" << endl;
+	//удаление взятого элемента текста
 	TextDeleteBackElem(vector);
 	return taken;
 }
 
+//функция изменения следующего от рабочего указателя элемента текста
 bool TextChangeNextElem(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't change elem" << endl;
 		return false;
 	}
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
-	}
+	//проверка на существование следующего элемента текста
 	if(vector->tmpText->next == nullptr) {
 		cout << "Pointer at the end of text" << endl;
 		return  false;
 	}
+	//вывод элемента текста до изменений
 	cout << "Next Sentence now :" << endl;
 	PrintSentence(vector->tmpText->next);
 	cout << endl;
-	if(!((vector->tmpText)->next->tmpSentence = SentenceWork(vector->tmpText->next))) { // if is empty
+	//проверка на пустоту измененного элемента текста
+	if(!((vector->tmpText)->next->tmpSentence = SentenceWork(vector->tmpText->next))) {
 		cout << "Sentence is empty" << endl;
+		//удаление пустого элемента текста
 		TextDeleteNextElem(vector->text,vector->tmpText);
 	} else {
 		cout << "Next Sentence was changed" << endl;
@@ -332,24 +381,26 @@ bool TextChangeNextElem(TVectorList *vector) {
 	return true;
 }
 
+//функция изменения предыдущего от рабочего указателя элемента текста
 bool TextChangeBackElem(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't change elem" << endl;
 		return false;
 	}
-	if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
-	}
+	//проверка на существование предыдущего элемента текста
 	if((vector->tmpText)->back == nullptr) {
 		cout << "Pointer at the head of text" << endl;
 		return  false;
 	}
+	//вывод элемента текста до изменений
 	cout << "Back Sentence now :" << endl;
 	PrintSentence((vector->tmpText)->back);
 	cout << endl;
-	if(!((vector->tmpText)->back->tmpSentence = SentenceWork((vector->tmpText)->back))) { // if is empty
+	//проверка на пустоту измененного элемента текста
+	if(!((vector->tmpText)->back->tmpSentence = SentenceWork((vector->tmpText)->back))) {
 		cout << "Sentence is empty" << endl;
+		//удаление пустого элемента текста
 		TextDeleteBackElem(vector);
 	} else {
 		cout << "Back Sentence was changed" << endl;
@@ -357,13 +408,17 @@ bool TextChangeBackElem(TVectorList *vector) {
 	return true;
 }
 
+//функция создания нового элемента текста
 TTextDList* TextCreateNew() {
+	//выделение памяти под новый элемент текста
 	TTextDList* newSentence = nullptr;
 	newSentence = (TTextDList*)malloc(sizeof(TTextDList));
+	//проверка выделилась ли память под новый элемент текста
 	if(!newSentence) {
 		cout << "Memory is not found" << endl;
 		return nullptr;
 	}
+	//обнуление данных элемента текста
 	newSentence->next = nullptr;
 	newSentence->sentence = nullptr;
 	newSentence->back = nullptr;
@@ -371,6 +426,7 @@ TTextDList* TextCreateNew() {
 	return newSentence;
 }
 
+//функция проверки на пустоту созданного элемента текста
 TTextDList* TextConnect() {
 	TTextDList *newObj = TextCreateNew();
 	newObj->tmpSentence = SentenceWork(newObj);
@@ -381,24 +437,24 @@ TTextDList* TextConnect() {
 	}
 }
 
+//функция добавления созданного элемента текста следующим от рабочего указателя
 bool TextAddNextElem(TVectorList *vector) {
+	//проверка на пустоту созданного элемента текста
 	TTextDList *newObj = TextConnect();
 	if(!newObj) {
 		cout << "Sentence is empty" << endl;
 		cout << "Sentence was deleted" << endl;
 		return true;
 	}
-
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
+		//добавление первого элемента текста
 		vector->text = newObj;
 		vector->tmpText = newObj;
 		cout << "First sentence was added" << endl;
 		return true;
-	} else if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
 	}
-
+	//добавление нового элемента текста следующим от рабочего указателя
 	TTextDList *help = vector->tmpText->next;
 	vector->tmpText->next = newObj;
 	vector->tmpText->next->back = vector->tmpText;
@@ -410,23 +466,24 @@ bool TextAddNextElem(TVectorList *vector) {
 	return true;
 }
 
+//функция добавления созданного элемента предыдущим от рабочего указателя
 bool TextAddBackElem(TVectorList *vector) {
+	//проверка на пустоту созданного элемента текста
 	TTextDList *newObj = TextConnect();
-	if(!newObj) { //if is empty
+	if(!newObj) {
 		cout << "Sentence is empty" << endl;
 		cout << "Sentence was deleted" << endl;
 		return true;
 	}
-
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
+		//добавление первого элемента текста
 		vector->text = newObj;
 		vector->tmpText = vector->text;
 		cout << "First sentence was added" << endl;
 		return true;
-	} else if(vector->tmpText == nullptr) {
-		cout << "Text is empty or Pointer does not put" << endl;
-		return false;
 	} else if(vector->tmpText->back == nullptr) {
+		//добавление элемента прерыдущим от рабочего указателя на место первого
 		vector->text = newObj;
 		(vector->text)->back = nullptr;
 		(vector->text)->next = vector->tmpText;
@@ -434,6 +491,7 @@ bool TextAddBackElem(TVectorList *vector) {
 		cout << "Sentence was added to the first position" << endl;
 		return true;
 	}
+	//добавление нового элемента предыдущим от рабочего указателя
 	TTextDList *help = vector->tmpText->back;
 	vector->tmpText->back = newObj;
 	vector->tmpText->back->next = vector->tmpText;
@@ -443,18 +501,23 @@ bool TextAddBackElem(TVectorList *vector) {
 	return true;
 }
 
+//функция вывода текста в обычном и обратном порядке
 bool TextToPrint(TVectorList *vector) {
+	//проверка текста на пустоту
 	if(vector->text == nullptr) {
 		cout << "Text is empty. You can't print elem" << endl;
 		return false;
 	}
+	//вывод текста в обычном виде
 	PrintText(vector);
+	//вывод текста в обратном порядке
 	cout << "Revers print:" << endl;
 	TTextDList *tmp = vector->text;
 	while(tmp->next) {
 		tmp = tmp->next;
 	}
 	while(tmp) {
+		//вывод рабочего указателя
 		if(tmp == vector->tmpText) {
 			cout << "-->";
 		}
@@ -466,6 +529,7 @@ bool TextToPrint(TVectorList *vector) {
 	return true;
 }
 
+//функция работы с текстом
 TTextDList* TextWork(TVectorList *vector) {
 	bool loop = true;
 	bool start = false;
@@ -476,6 +540,7 @@ TTextDList* TextWork(TVectorList *vector) {
 	while (loop) {
 		headText = vector->text;
 		tmp = vector->tmpText;
+		//выбор необходимой операции над текстом
 		switch (TextChooseOperation()) {
 			case 1: {
 				cout << "Let's start work with text" << endl;
@@ -512,10 +577,13 @@ TTextDList* TextWork(TVectorList *vector) {
 				loop = false;
 				break;
 			case 23: {
+				//вывод взятого элемента текста
 				if (takenText != nullptr) {
 					cout << "Sentence that you took is :" << endl;
 					PrintSentence(takenText);
 				}
+				//очищение текста
+				TextToNull(vector);
 				cout << "Good Bye";
 				exit(0);
 			}
@@ -524,6 +592,7 @@ TTextDList* TextWork(TVectorList *vector) {
 				break;
 			}
 		}
+		//вывод не пустого текста после каждой операции
 		if (vector->text) {
 			cout << "Your Text now : \t" << endl;
 			PrintText(vector);
